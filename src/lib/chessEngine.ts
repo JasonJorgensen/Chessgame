@@ -43,6 +43,10 @@ export class ChessEngine {
     return this.game.fen();
   }
 
+  loadFen(fen: string) {
+    this.game = new Chess(fen);
+  }
+
   getTurn(): PlayerColor {
     return this.game.turn();
   }
@@ -111,4 +115,20 @@ export class ChessEngine {
     return { from: last.from, to: last.to };
   }
 }
+
+export const getStatusFromFen = (fen: string): GameStatus => {
+  const game = new Chess(fen);
+  const inCheckmate = game.isCheckmate();
+  const inDraw = game.isDraw();
+  const inStalemate = game.isStalemate();
+
+  return {
+    turn: game.turn(),
+    inCheck: game.isCheck(),
+    inCheckmate,
+    inDraw,
+    inStalemate,
+    isGameOver: inCheckmate || inDraw || inStalemate,
+  };
+};
 
